@@ -1,0 +1,10 @@
+.next
+.next-bak-*
+node_modules
+functions/node_modules
+.env.local
+.vercel
+dist
+*.log
+tsconfig.tsbuildinfo
+.codex/
