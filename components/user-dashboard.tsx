@@ -179,10 +179,24 @@ export function UserDashboard() {
       submittedAt: new Date().toISOString()
     };
 
-    await createOrder(order);
-    setOrderDrafts((prev) => ({ ...prev, [product.id]: "" }));
-    setMessage(`Đã gửi mã đơn cho ${product.name}. Khi duyệt xong, tiền hoàn sẽ cộng đúng vào đơn này.`);
-    await loadData();
+    await auth.authStateReady();
+
+    try {
+      await createOrder(order);
+      setOrderDrafts((prev) => ({ ...prev, [product.id]: "" }));
+      setMessage(`Đã gửi mã đơn cho ${product.name}. Khi duyệt xong, tiền hoàn sẽ cộng đúng vào đơn này.`);
+      await loadData();
+    } catch (error) {
+      const firebaseCode =
+        typeof error === "object" && error !== null && "code" in error ? String(error.code) : "";
+
+      if (firebaseCode === "permission-denied") {
+        setMessage("Khong gui duoc ma don. Hay deploy lai firestore.rules hoac dang nhap lai roi thu lai.");
+        return;
+      }
+
+      setMessage("Gui ma don that bai. Hay thu lai sau.");
+    }
   }
 
   async function handleBankSubmit(event: FormEvent<HTMLFormElement>) {
