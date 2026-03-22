@@ -35,7 +35,7 @@ export function UserDashboard() {
   const [selectedCategory, setSelectedCategory] = useState("Tất cả");
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [registerForm, setRegisterForm] = useState({ username: "", password: "" });
-  const [orderForm, setOrderForm] = useState({ orderCode: "" });
+  const [orderDrafts, setOrderDrafts] = useState<Record<string, string>>({});
   const [bankForm, setBankForm] = useState(emptyBankForm);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [message, setMessage] = useState("");
@@ -70,7 +70,21 @@ export function UserDashboard() {
   }
 
   useEffect(() => {
-    void initAnalytics();
+    if (typeof window !== "undefined") {
+      const idleWindow = window as Window & {
+        requestIdleCallback?: (callback: () => void) => number;
+      };
+      const startAnalytics = () => {
+        void initAnalytics();
+      };
+
+      if (typeof idleWindow.requestIdleCallback === "function") {
+        idleWindow.requestIdleCallback(startAnalytics);
+      } else {
+        window.setTimeout(startAnalytics, 1200);
+      }
+    }
+
     void loadData();
   }, []);
 
@@ -138,7 +152,7 @@ export function UserDashboard() {
     setMessage("Đã đăng xuất.");
   }
 
-  async function handleSubmitOrder(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmitOrder(event: FormEvent<HTMLFormElement>, product: Product) {
     event.preventDefault();
 
     if (!currentUser) {
@@ -146,27 +160,28 @@ export function UserDashboard() {
       return;
     }
 
-    if (!orderForm.orderCode.trim()) {
+    const orderCode = (orderDrafts[product.id] ?? "").trim();
+    if (!orderCode) {
       setMessage("Hãy nhập mã đơn hàng trước khi gửi.");
       return;
     }
 
     const order: Order = {
       id: `o-${crypto.randomUUID()}`,
-      orderCode: orderForm.orderCode.trim(),
+      orderCode,
       userId: currentUser.id,
       username: currentUser.username,
-      productId: "",
-      productName: "",
-      affiliateLink: "",
-      commissionValue: 0,
+      productId: product.id,
+      productName: product.name,
+      affiliateLink: product.affiliateLink,
+      commissionValue: product.commissionValue,
       status: "processing",
       submittedAt: new Date().toISOString()
     };
 
     await createOrder(order);
-    setOrderForm({ orderCode: "" });
-    setMessage("Đã gửi mã đơn hàng. Đội duyệt sẽ gắn sản phẩm và xử lý thủ công.");
+    setOrderDrafts((prev) => ({ ...prev, [product.id]: "" }));
+    setMessage(`Đã gửi mã đơn cho ${product.name}. Khi duyệt xong, tiền hoàn sẽ cộng đúng vào đơn này.`);
     await loadData();
   }
 
@@ -248,11 +263,8 @@ export function UserDashboard() {
         <section className="store-hero">
           <div className="hero-card hero-card--store">
             <span className="badge">Sản phẩm affiliate có hoa hồng rõ ràng</span>
-            <h1>Mua nhanh như sàn thương mại điện tử, gửi mã đơn gọn và nhận hoa hồng trong một ví.</h1>
-            <p>
-              PeBack tập trung vào trải nghiệm dễ dùng: tìm sản phẩm nhanh, thẻ nhỏ gọn như shop,
-              mua qua link affiliate, gửi mã đơn không cần chọn tên sản phẩm, theo dõi duyệt và rút tiền ngay trên web.
-            </p>
+            <h1>HOÀN TIỀN VỚI PEBACK GIÚP TIẾT KIỆM CHI PHÍ KHI MUA SẮM</h1>
+            <p>* WEB CHIA SẺ DOANH THU HOA HỒNG QUA SHOPPE TIẾP THỊ LIÊN KẾT</p>
 
             <div className="hero-pill-list">
               <div className="metric-pill">
@@ -293,16 +305,16 @@ export function UserDashboard() {
                 </div>
               </div>
               <a className="button button--compact" href={session ? "#orders" : "#auth"}>
-                {session ? "Gửi mã đơn" : "Đăng ký để bắt đầu"}
+                {session ? "Xem đơn của bạn" : "Đăng ký"}
               </a>
             </div>
 
             <div className="hero-card hero-card--tips">
               <div className="panel-kicker">3 bước nhận hoa hồng</div>
               <ol className="tips-list">
-                <li>Chọn sản phẩm và bấm Mua ngay để mở link affiliate.</li>
+                <li>Chọn sản phẩm và bấm Mua ngay.</li>
                 <li>Sau khi đặt hàng, vào mục Gửi mã đơn và điền đúng mã đơn Shopee.</li>
-                <li>Đội duyệt sẽ gắn sản phẩm, xác nhận đơn và cộng số dư vào tài khoản của bạn.</li>
+                <li>Đơn sẽ được xác nhận sau khi đơn hoàn thành và cộng số dư vào tài khoản của bạn.</li>
               </ol>
             </div>
           </div>
@@ -317,12 +329,9 @@ export function UserDashboard() {
         {!session ? (
           <section className="section" id="auth">
             <div className="hero-card hero-card--auth stack">
-              <span className="badge">Bắt đầu bằng đăng ký</span>
-              <h2 className="section-title">Tạo tài khoản trước, đăng ký xong sẽ tự vào luôn.</h2>
-              <p className="section-copy">
-                Luồng mặc định của PeBack giờ ưu tiên đăng ký cho người mới. Khi đăng ký thành công,
-                hệ thống sẽ tự đăng nhập vào tài khoản luôn để bạn dùng tiếp ngay.
-              </p>
+              <span className="badge">Đăng ký</span>
+              <h2 className="section-title">Đăng ký</h2>
+              <p className="section-copy">Tạo tài khoản để bắt đầu dùng PeBack.</p>
 
               {authMode === "register" ? (
                 <form className="auth-form stack" onSubmit={handleRegister}>
@@ -341,7 +350,7 @@ export function UserDashboard() {
                   />
                   <div className="note">Ví dụ hợp lệ: Peback@123</div>
                   <button className="button" type="submit">
-                    Đăng ký và vào luôn
+                    Đăng ký
                   </button>
                 </form>
               ) : (
@@ -390,10 +399,25 @@ export function UserDashboard() {
           <div className="section-head">
             <div>
               <h2 className="section-title">Sản phẩm hoa hồng</h2>
-              <p className="section-copy">
-                Thẻ sản phẩm được thu gọn như shop, dễ xem giá, hoa hồng và bấm mua nhanh chỉ trong 1 lần nhìn.
-              </p>
+              <p className="section-copy">Mỗi sản phẩm có ô gửi mã đơn riêng để hệ thống gắn hoa hồng đúng đơn đã mua.</p>
             </div>
+          </div>
+
+          <div className="category-toolbar">
+            <label className="category-select-wrap">
+              <span className="panel-kicker">Chọn danh mục</span>
+              <select
+                className="select category-select"
+                value={selectedCategory}
+                onChange={(event) => setSelectedCategory(event.target.value)}
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </label>
             <div className="section-tag">{filteredProducts.length} kết quả</div>
           </div>
 
@@ -417,7 +441,13 @@ export function UserDashboard() {
                   <div className="shop-card__image-wrap">
                     <div className="shop-card__image">
                       {product.imageUrl.trim() ? (
-                        <Image alt={product.name} src={product.imageUrl} width={720} height={720} />
+                        <Image
+                          alt={product.name}
+                          src={product.imageUrl}
+                          width={720}
+                          height={720}
+                          sizes="(max-width: 620px) 44vw, (max-width: 860px) 30vw, 220px"
+                        />
                       ) : (
                         <div className="shop-card__image-placeholder">Chưa có ảnh</div>
                       )}
@@ -447,10 +477,26 @@ export function UserDashboard() {
                       <a className="button button--compact" href={product.affiliateLink} target="_blank" rel="noreferrer">
                         Mua ngay
                       </a>
-                      <a className="button-ghost button-ghost--compact" href="#orders">
-                        Gửi mã đơn
-                      </a>
                     </div>
+                    {session ? (
+                      <form className="stack" onSubmit={(event) => void handleSubmitOrder(event, product)}>
+                        <input
+                          className="field"
+                          placeholder="Nhập mã đơn Shopee"
+                          value={orderDrafts[product.id] ?? ""}
+                          onChange={(event) =>
+                            setOrderDrafts((prev) => ({ ...prev, [product.id]: event.target.value }))
+                          }
+                        />
+                        <button className="button-ghost button-ghost--compact" type="submit">
+                          Gửi mã đơn sản phẩm này
+                        </button>
+                      </form>
+                    ) : (
+                      <a className="button-ghost button-ghost--compact" href="#auth">
+                        Đăng ký để gửi mã đơn
+                      </a>
+                    )}
                   </div>
                 </article>
               ))
@@ -463,28 +509,31 @@ export function UserDashboard() {
         <section className="section" id="orders">
           <div className="section-head">
             <div>
-              <h2 className="section-title">Gửi mã đơn và theo dõi duyệt</h2>
-              <p className="section-copy">
-                User chỉ cần nhập mã đơn hàng. Không cần chọn tên sản phẩm, đội duyệt sẽ gắn sản phẩm sau.
-              </p>
+              <h2 className="section-title">Đơn của bạn</h2>
+              <p className="section-copy">Gửi mã đơn trực tiếp ở từng sản phẩm. Khu này dùng để theo dõi trạng thái duyệt.</p>
             </div>
           </div>
 
           <div className="dashboard-panels dashboard-panels--wide">
-            <form className="panel stack" onSubmit={handleSubmitOrder}>
-              <div className="panel-kicker">Gửi mã đơn</div>
-              <h3>Tạo đơn chờ duyệt</h3>
-              <input
-                className="field"
-                placeholder="Nhập mã đơn hàng Shopee"
-                value={orderForm.orderCode}
-                onChange={(event) => setOrderForm({ orderCode: event.target.value })}
-              />
-              <div className="note">Không cần điền tên sản phẩm. Hệ thống sẽ gắn sản phẩm khi duyệt đơn.</div>
-              <button className="button" type="submit">
-                Gửi mã đơn
-              </button>
-            </form>
+            <div className="panel stack">
+              <div className="panel-kicker">Cách gửi mã đơn</div>
+              <h3>Gửi ngay trên từng sản phẩm</h3>
+              <div className="summary-metrics summary-metrics--panel">
+                <div>
+                  <span>Bước 1</span>
+                  <strong>Bấm Mua ngay</strong>
+                </div>
+                <div>
+                  <span>Bước 2</span>
+                  <strong>Quay lại đúng sản phẩm</strong>
+                </div>
+                <div>
+                  <span>Bước 3</span>
+                  <strong>Nhập mã đơn để duyệt</strong>
+                </div>
+              </div>
+              <div className="note">Vui lòng điền đúng mã đơn.</div>
+            </div>
 
             <div className="panel panel--table">
               <div className="panel-header">
@@ -532,35 +581,12 @@ export function UserDashboard() {
         <section className="section" id="withdrawals">
           <div className="section-head">
             <div>
-              <h2 className="section-title">Rút tiền và liên kết ngân hàng</h2>
-              <p className="section-copy">
-                Tách rõ giữa thao tác liên kết ngân hàng và gửi yêu cầu rút tiền để dùng thuận tay hơn.
-              </p>
+              <h2 className="section-title">{currentUser?.linkedBank ? "Rút tiền" : "Rút tiền và liên kết ngân hàng"}</h2>
             </div>
           </div>
 
-          <div className="dashboard-panels dashboard-panels--wide">
-            {currentUser?.linkedBank ? (
-              <div className="panel stack">
-                <div className="panel-kicker">Ngân hàng đã liên kết</div>
-                <h3>Thông tin nhận tiền hiện tại</h3>
-                <div className="summary-metrics summary-metrics--panel">
-                  <div>
-                    <span>Tên ngân hàng</span>
-                    <strong>{currentUser.linkedBank.bankName}</strong>
-                  </div>
-                  <div>
-                    <span>Số tài khoản</span>
-                    <strong>{currentUser.linkedBank.accountNumber}</strong>
-                  </div>
-                  <div>
-                    <span>Chủ tài khoản</span>
-                    <strong>{currentUser.linkedBank.accountHolder}</strong>
-                  </div>
-                </div>
-                <div className="note">Bạn đã liên kết ngân hàng rồi nên hệ thống sẽ ẩn form liên kết lại.</div>
-              </div>
-            ) : (
+          <div className={currentUser?.linkedBank ? "dashboard-panels" : "dashboard-panels dashboard-panels--wide"}>
+            {currentUser?.linkedBank ? null : (
               <form className="panel stack" onSubmit={handleBankSubmit}>
                 <div className="panel-kicker">Liên kết ngân hàng</div>
                 <h3>Mỗi tài khoản chỉ liên kết 1 lần</h3>
@@ -649,10 +675,6 @@ export function UserDashboard() {
             </div>
           </div>
         </section>
-
-        <footer className="footer">
-          PeBack dùng Firebase để lưu user, sản phẩm, đơn hàng, số dư và yêu cầu rút tiền trong một giao diện dễ nhìn, dễ thao tác.
-        </footer>
       </main>
     </>
   );

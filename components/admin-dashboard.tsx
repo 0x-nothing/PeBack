@@ -227,10 +227,10 @@ export function AdminDashboard() {
       <section className="store-hero store-hero--admin">
         <div className="hero-card hero-card--store">
           <span className="badge">Khu quản trị nội bộ</span>
-          <h1>Quản lý sản phẩm, gắn sản phẩm cho mã đơn và xử lý số dư trong một màn hình gọn.</h1>
+          <h1>Quản lý sản phẩm, duyệt đúng đơn đã mua và xử lý số dư trong một màn hình gọn.</h1>
           <p>
-            User giờ chỉ gửi mã đơn. Ở đây admin sẽ gắn đúng sản phẩm vào từng mã đơn trước khi xác nhận hoàn thành,
-            nhờ vậy luồng dùng bên ngoài sẽ nhẹ hơn mà phía quản trị vẫn kiểm soát được hoa hồng.
+            User giờ gửi mã đơn ngay tại từng sản phẩm. Ở đây admin chủ yếu xác nhận đơn đúng sản phẩm đã mua,
+            và vẫn có thể đổi sản phẩm nếu cần để giữ luồng duyệt linh hoạt.
           </p>
           <div className="hero-pill-list">
             <div className="metric-pill">
@@ -447,7 +447,7 @@ export function AdminDashboard() {
                   <tr>
                     <th>Mã đơn</th>
                     <th>Tài khoản</th>
-                    <th>Gắn sản phẩm</th>
+                    <th>Sản phẩm</th>
                     <th>Hoa hồng</th>
                     <th>Trạng thái</th>
                     <th>Thao tác</th>
@@ -467,7 +467,7 @@ export function AdminDashboard() {
                           <div className="note">{formatDate(order.submittedAt)}</div>
                         </td>
                         <td data-label="Tài khoản">{order.username}</td>
-                        <td data-label="Gắn sản phẩm">
+                        <td data-label="Sản phẩm">
                           <div className="action-stack">
                             <select
                               className="select"
@@ -476,7 +476,7 @@ export function AdminDashboard() {
                                 setOrderProductEditor((prev) => ({ ...prev, [order.id]: event.target.value }))
                               }
                             >
-                              <option value="">Chọn sản phẩm để gắn</option>
+                              <option value="">Chọn hoặc đổi sản phẩm</option>
                               {products.map((product) => (
                                 <option key={product.id} value={product.id}>
                                   {product.name}

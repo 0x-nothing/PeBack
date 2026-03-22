@@ -98,6 +98,7 @@ img {
   background: rgba(255, 248, 241, 0.82);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(113, 74, 39, 0.08);
+  transition: transform 0.24s ease, opacity 0.24s ease, background 0.18s ease;
 }
 
 .topbar__inner {
@@ -117,14 +118,16 @@ img {
 .brand-mark {
   width: 44px;
   height: 44px;
-  display: grid;
-  place-items: center;
+  display: block;
   border-radius: 16px;
-  background: linear-gradient(135deg, var(--primary), #ff9b42);
-  color: #fff;
-  font-size: 1.1rem;
-  font-weight: 800;
+  overflow: hidden;
   box-shadow: var(--shadow-soft);
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand-copy {
@@ -521,6 +524,24 @@ img {
 
 .chip-row {
   grid-template-columns: repeat(auto-fit, minmax(110px, max-content));
+}
+
+.category-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.category-select-wrap {
+  display: grid;
+  gap: 8px;
+  min-width: min(100%, 280px);
+}
+
+.category-select {
+  min-width: 220px;
 }
 
 .chip-button {
@@ -948,6 +969,14 @@ tbody tr:hover {
     grid-template-columns: 1fr;
   }
 
+  .category-toolbar {
+    align-items: stretch;
+  }
+
+  .category-select {
+    min-width: 0;
+  }
+
   .product-grid--shop {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1018,7 +1047,12 @@ tbody tr:hover {
 
 @media (max-width: 620px) {
   body {
-    padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: 24px;
+    background: linear-gradient(180deg, #fffaf5 0%, #fff1e4 100%);
+  }
+
+  body::before {
+    display: none;
   }
 
   .page-stack {
@@ -1030,11 +1064,18 @@ tbody tr:hover {
   .panel,
   .stat-card {
     padding: 16px;
+    box-shadow: 0 8px 20px rgba(79, 45, 18, 0.07);
+  }
+
+  .topbar {
+    padding-top: 8px;
+    backdrop-filter: none;
+    background: transparent;
+    border-bottom: 0;
   }
 
   .topbar__inner {
-    min-height: 68px;
-    padding: 10px 0;
+    display: none;
   }
 
   .brand {
@@ -1062,6 +1103,18 @@ tbody tr:hover {
     margin-top: 18px;
     padding: 14px;
     border-radius: 18px;
+  }
+
+  .hero-card,
+  .panel,
+  .card,
+  .shop-card,
+  .alert-banner {
+    animation: none;
+  }
+
+  .hero-card--store::after {
+    display: none;
   }
 
   .auth-switch {
@@ -1110,6 +1163,10 @@ tbody tr:hover {
     padding: 10px 10px 12px;
   }
 
+  .shop-card .stack {
+    gap: 8px;
+  }
+
   .shop-card__badges {
     align-items: flex-start;
     justify-content: flex-start;
@@ -1145,24 +1202,7 @@ tbody tr:hover {
   }
 
   .chip-row {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    scrollbar-width: none;
-  }
-
-  .chip-row::-webkit-scrollbar {
     display: none;
-  }
-
-  .chip-button {
-    width: auto;
-    min-width: max-content;
-    flex: 0 0 auto;
-    min-height: 34px;
-    padding: 7px 12px;
-    font-size: 0.82rem;
   }
 
   .shop-card__footer,
@@ -1200,31 +1240,28 @@ tbody tr:hover {
   }
 
   .mobile-dock {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-    z-index: 40;
+    position: static;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
-    padding: 10px;
-    border-radius: 22px;
-    background: rgba(255, 250, 244, 0.94);
-    border: 1px solid rgba(113, 74, 39, 0.1);
-    backdrop-filter: blur(14px);
-    box-shadow: 0 16px 32px rgba(79, 45, 18, 0.16);
+    width: min(100% - 22px, var(--container));
+    margin: 0 auto 10px;
+    padding: 6px;
+    border-radius: 18px;
+    background: rgba(255, 249, 243, 0.96);
+    border: 1px solid rgba(113, 74, 39, 0.08);
+    box-shadow: 0 8px 18px rgba(79, 45, 18, 0.08);
   }
 
   .mobile-dock__item {
     display: grid;
     place-items: center;
-    min-height: 48px;
+    min-height: 40px;
     padding: 6px 8px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.78);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(113, 74, 39, 0.08);
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     font-weight: 800;
     text-align: center;
   }
@@ -1242,5 +1279,18 @@ tbody tr:hover {
     min-height: 32px;
     padding: 6px 10px;
     font-size: 0.78rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }

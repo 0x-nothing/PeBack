@@ -55,10 +55,16 @@ service cloud.firestore {
         && request.resource.data.username is string
         && request.resource.data.status == "processing"
         && request.resource.data.reviewedAt == null
-        && request.resource.data.productId == ""
-        && request.resource.data.productName == ""
-        && request.resource.data.affiliateLink == ""
-        && request.resource.data.commissionValue == 0;
+        && request.resource.data.productId is string
+        && request.resource.data.productId != ""
+        && exists(/databases/$(database)/documents/products/$(request.resource.data.productId))
+        && get(/databases/$(database)/documents/products/$(request.resource.data.productId)).data.isActive == true
+        && request.resource.data.productName
+          == get(/databases/$(database)/documents/products/$(request.resource.data.productId)).data.name
+        && request.resource.data.affiliateLink
+          == get(/databases/$(database)/documents/products/$(request.resource.data.productId)).data.affiliateLink
+        && request.resource.data.commissionValue
+          == get(/databases/$(database)/documents/products/$(request.resource.data.productId)).data.commissionValue;
 
       allow update: if isAdmin()
         && resource.data.status == "processing"
