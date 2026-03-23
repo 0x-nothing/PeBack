@@ -136,7 +136,6 @@ export async function markWithdrawalStatus(
 ) {
   await runTransaction(db, async (transaction) => {
     const withdrawalRef = doc(db, "withdrawals", withdrawalId);
-    const userRef = doc(db, "users", userId);
 
     const withdrawalSnapshot = await transaction.get(withdrawalRef);
     if (!withdrawalSnapshot.exists()) {
@@ -148,10 +147,10 @@ export async function markWithdrawalStatus(
       throw new Error("Yêu cầu rút tiền không còn ở trạng thái chờ xử lý.");
     }
 
-    transaction.update(withdrawalRef, {
-      status,
-      processedAt: new Date().toISOString()
-    });
+    const resolvedUserId = withdrawal.userId || userId;
+    const withdrawalAmount = withdrawal.amount || amount;
+    let nextBalance: number | null = null;
+    let userRef = doc(db, "users", resolvedUserId);
 
     if (status === "paid") {
       const userSnapshot = await transaction.get(userRef);
@@ -160,12 +159,21 @@ export async function markWithdrawalStatus(
       }
 
       const user = userSnapshot.data() as AppUser;
-      if (user.balance < amount) {
+      if (user.balance < withdrawalAmount) {
         throw new Error("Số dư user không đủ để chi trả.");
       }
 
+      nextBalance = user.balance - withdrawalAmount;
+    }
+
+    transaction.update(withdrawalRef, {
+      status,
+      processedAt: new Date().toISOString()
+    });
+
+    if (status === "paid" && nextBalance !== null) {
       transaction.update(userRef, {
-        balance: user.balance - amount
+        balance: nextBalance
       });
     }
   });
