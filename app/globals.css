@@ -87,6 +87,18 @@ img {
   padding: 28px 0 42px;
 }
 
+.page-stack--user .section--products-first {
+  order: -30;
+}
+
+.page-stack--user .store-hero--landing {
+  order: -20;
+}
+
+.page-stack--user .section--auth-gate {
+  order: -10;
+}
+
 .page-stack--admin {
   padding-top: 22px;
 }
@@ -916,6 +928,35 @@ tbody tr:hover {
   font-size: 0.92rem;
 }
 
+.contact-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1f7aff, #0d5ae5);
+  color: #fff;
+  box-shadow: 0 14px 30px rgba(24, 119, 242, 0.28);
+}
+
+.contact-fab__icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.contact-fab__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;
@@ -1279,6 +1320,18 @@ tbody tr:hover {
     min-height: 32px;
     padding: 6px 10px;
     font-size: 0.78rem;
+  }
+
+  .contact-fab {
+    right: 12px;
+    bottom: 12px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .contact-fab__icon {
+    width: 30px;
+    height: 30px;
   }
 }
 

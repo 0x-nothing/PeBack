@@ -5,8 +5,8 @@ import {
   signOut
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
-import { auth } from "@/lib/firebase";
-import { createUser, getUserProfile } from "@/lib/firebase-collections";
+import { auth } from "@/lib/firebase-core";
+import { createUser, getUserProfile } from "@/lib/firebase-user-collections";
 import { AppUser } from "@/lib/types";
 
 function usernameToEmail(username: string) {

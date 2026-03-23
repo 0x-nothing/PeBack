@@ -21,47 +21,47 @@ export function Topbar({ session, onLogout }: TopbarProps) {
             <strong>
               Pe<span>Back</span>
             </strong>
-            <small>San hoa hong affiliate gon, de dung</small>
+            <small>Sàn hoa hồng affiliate gọn, dễ dùng</small>
           </span>
         </Link>
 
-        <nav className="nav-links" aria-label="Dieu huong chinh">
+        <nav className="nav-links" aria-label="Điều hướng chính">
           <Link href="#products" className="nav-link">
-            San pham
+            Sản phẩm
           </Link>
           <Link href="#orders" className="nav-link">
-            Gui ma don
+            Gửi mã đơn
           </Link>
           <Link href="#withdrawals" className="nav-link">
-            Rut tien
+            Rút tiền
           </Link>
           {session ? (
             <div className="session-pill">
               <span>{session.username}</span>
               <button className="button-ghost button-ghost--compact" onClick={onLogout} type="button">
-                Dang xuat
+                Đăng xuất
               </button>
             </div>
           ) : (
             <Link href="#auth" className="button button--compact">
-              Dang ky
+              Đăng ký
             </Link>
           )}
         </nav>
       </div>
 
-      <div className="mobile-dock" aria-label="Dieu huong nhanh tren dien thoai">
+      <div className="mobile-dock" aria-label="Điều hướng nhanh trên điện thoại">
         <Link href="#products" className="mobile-dock__item">
-          <span>San pham</span>
+          <span>Sản phẩm</span>
         </Link>
         <Link href="#orders" className="mobile-dock__item">
-          <span>Ma don</span>
+          <span>Mã đơn</span>
         </Link>
         <Link href="#withdrawals" className="mobile-dock__item">
-          <span>Vi tien</span>
+          <span>Ví tiền</span>
         </Link>
         <Link href={session ? "#orders" : "#auth"} className="mobile-dock__item mobile-dock__item--accent">
-          <span>{session ? "Don cua toi" : "Dang ky"}</span>
+          <span>{session ? "Đơn của tôi" : "Đăng ký"}</span>
         </Link>
       </div>
     </header>

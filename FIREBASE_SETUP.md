@@ -166,7 +166,7 @@ firebase.cmd deploy --only firestore:rules
   "id": "w-abc",
   "userId": "firebase-auth-uid",
   "username": "partner01",
-  "amount": 50000,
+  "amount": 10000,
   "bankName": "Vietcombank",
   "accountNumber": "0123456789",
   "accountHolder": "Nguyen Van A",

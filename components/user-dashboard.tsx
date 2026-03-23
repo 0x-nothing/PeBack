@@ -10,8 +10,8 @@ import {
   getUserProfile,
   getWithdrawalsForUser,
   updateUserBank
-} from "@/lib/firebase-collections";
-import { auth, initAnalytics } from "@/lib/firebase";
+} from "@/lib/firebase-user-collections";
+import { auth, initAnalytics } from "@/lib/firebase-core";
 import { loginWithUsername, logoutCurrentUser, registerWithUsername } from "@/lib/auth";
 import { clearSession, loadSession, saveSession, SessionState } from "@/lib/session";
 import { AppUser, Order, Product, WithdrawalRequest } from "@/lib/types";
@@ -191,11 +191,11 @@ export function UserDashboard() {
         typeof error === "object" && error !== null && "code" in error ? String(error.code) : "";
 
       if (firebaseCode === "permission-denied") {
-        setMessage("Khong gui duoc ma don. Hay deploy lai firestore.rules hoac dang nhap lai roi thu lai.");
+        setMessage("Không gửi được mã đơn. Hãy deploy lại Firestore Rules hoặc đăng nhập lại rồi thử lại.");
         return;
       }
 
-      setMessage("Gui ma don that bai. Hay thu lai sau.");
+      setMessage("Gửi mã đơn thất bại. Hãy thử lại sau.");
     }
   }
 
@@ -237,8 +237,8 @@ export function UserDashboard() {
     }
 
     const amount = Number(withdrawAmount);
-    if (!amount || amount < 50000) {
-      setMessage("Số tiền rút tối thiểu là 50.000 VND.");
+    if (!amount || amount < 10000) {
+      setMessage("Số tiền rút tối thiểu là 10.000 VND.");
       return;
     }
 
@@ -273,8 +273,8 @@ export function UserDashboard() {
     <>
       <Topbar session={session} onLogout={() => void handleLogout()} />
 
-      <main className="page-shell page-stack">
-        <section className="store-hero">
+      <main className="page-shell page-stack page-stack--user">
+        <section className="store-hero store-hero--landing">
           <div className="hero-card hero-card--store">
             <span className="badge">Sản phẩm affiliate có hoa hồng rõ ràng</span>
             <h1>HOÀN TIỀN VỚI PEBACK GIÚP TIẾT KIỆM CHI PHÍ KHI MUA SẮM</h1>
@@ -315,7 +315,7 @@ export function UserDashboard() {
                 </div>
                 <div>
                   <span>Rút tối thiểu</span>
-                  <strong>50.000 VND</strong>
+                  <strong>10.000 VND</strong>
                 </div>
               </div>
               <a className="button button--compact" href={session ? "#orders" : "#auth"}>
@@ -341,7 +341,7 @@ export function UserDashboard() {
         ) : null}
 
         {!session ? (
-          <section className="section" id="auth">
+          <section className="section section--auth-gate" id="auth">
             <div className="hero-card hero-card--auth stack">
               <span className="badge">Đăng ký</span>
               <h2 className="section-title">Đăng ký</h2>
@@ -409,7 +409,7 @@ export function UserDashboard() {
           </section>
         ) : null}
 
-        <section className="section" id="products">
+        <section className="section section--products-first" id="products">
           <div className="section-head">
             <div>
               <h2 className="section-title">Sản phẩm hoa hồng</h2>
@@ -635,7 +635,7 @@ export function UserDashboard() {
                 <input
                   className="field"
                   type="number"
-                  min={50000}
+                  min={10000}
                   placeholder="Số tiền cần rút"
                   value={withdrawAmount}
                   onChange={(event) => setWithdrawAmount(event.target.value)}
@@ -647,7 +647,7 @@ export function UserDashboard() {
                   </div>
                   <div>
                     <span>Mức tối thiểu</span>
-                    <strong>50.000 VND</strong>
+                    <strong>10.000 VND</strong>
                   </div>
                 </div>
                 <button className="button" type="submit">
