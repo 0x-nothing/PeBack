@@ -482,7 +482,7 @@ export function UserDashboard() {
                         <div className="price price--shop">{formatCurrency(product.price)}</div>
                       </div>
                       <div className="cashback-box">
-                        <span>Bạn nhận</span>
+                        <span>Hoàn lại</span>
                         <strong>{formatCurrency(product.commissionValue)}</strong>
                       </div>
                     </div>
