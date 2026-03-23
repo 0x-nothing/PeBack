@@ -100,7 +100,6 @@ export function UserDashboard() {
 
   const pendingOrders = orders.filter((item) => item.status === "processing").length;
   const completedOrders = orders.filter((item) => item.status === "completed").length;
-  const pendingWithdrawals = withdrawals.filter((item) => item.status === "pending").length;
   const totalPaidWithdrawalsAmount = withdrawals
     .filter((item) => item.status === "paid")
     .reduce((total, item) => total + item.amount, 0);

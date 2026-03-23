@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   adjustUserBalance,
   createProduct,
@@ -398,7 +399,7 @@ export function AdminDashboard() {
                   <div className="shop-card__image-wrap">
                     <div className="shop-card__image shop-card__image--small">
                       {product.imageUrl.trim() ? (
-                        <img alt={product.name} src={product.imageUrl} />
+                        <Image alt={product.name} src={product.imageUrl} width={100} height={100} />
                       ) : (
                         <div className="shop-card__image-placeholder">Chưa có ảnh</div>
                       )}

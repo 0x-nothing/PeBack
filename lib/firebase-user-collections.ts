@@ -11,7 +11,6 @@ import {
 import { dbLite } from "@/lib/firebase-lite";
 import { AppUser, Order, Product, WithdrawalRequest } from "@/lib/types";
 
-const usersCollection = collection(dbLite, "users");
 const productsCollection = collection(dbLite, "products");
 const ordersCollection = collection(dbLite, "orders");
 const withdrawalsCollection = collection(dbLite, "withdrawals");

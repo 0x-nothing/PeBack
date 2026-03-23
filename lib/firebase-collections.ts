@@ -150,7 +150,7 @@ export async function markWithdrawalStatus(
     const resolvedUserId = withdrawal.userId || userId;
     const withdrawalAmount = withdrawal.amount || amount;
     let nextBalance: number | null = null;
-    let userRef = doc(db, "users", resolvedUserId);
+    const userRef = doc(db, "users", resolvedUserId);
 
     if (status === "paid") {
       const userSnapshot = await transaction.get(userRef);
