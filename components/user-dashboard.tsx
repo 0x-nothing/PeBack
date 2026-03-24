@@ -33,6 +33,8 @@ export function UserDashboard() {
   const [session, setSession] = useState<SessionState | null>(null);
   const [authMode, setAuthMode] = useState<"register" | "login">("register");
   const [selectedCategory, setSelectedCategory] = useState("Tất cả");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [randomSeed, setRandomSeed] = useState(Math.random());
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [registerForm, setRegisterForm] = useState({ username: "", password: "" });
   const [orderDrafts, setOrderDrafts] = useState<Record<string, string>>({});
@@ -88,15 +90,39 @@ export function UserDashboard() {
     void loadData();
   }, []);
 
+  // Re-shuffle khi chọn "Tất cả"
+  useEffect(() => {
+    if (selectedCategory === "Tất cả") {
+      setRandomSeed(Math.random());
+    }
+  }, [selectedCategory]);
+
   const categories = useMemo(() => {
     return ["Tất cả", ...new Set(products.map((item) => item.category))];
   }, [products]);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((item) => {
-      return selectedCategory === "Tất cả" || item.category === selectedCategory;
+    const normalized = searchQuery.trim().toLowerCase();
+    let result = products.filter((item) => {
+      const categoryMatch = selectedCategory === "Tất cả" || item.category === selectedCategory;
+      const searchMatch = normalized === "" || item.name.toLowerCase().includes(normalized);
+      return categoryMatch && searchMatch;
     });
-  }, [products, selectedCategory]);
+
+    // Shuffle khi selectedCategory === "Tất cả"
+    if (selectedCategory === "Tất cả") {
+      const seededRandom = (seed: number, index: number) => {
+        const x = Math.sin(seed + index) * 10000;
+        return x - Math.floor(x);
+      };
+
+      result = [...result].sort(
+        (a, b) => seededRandom(randomSeed, result.indexOf(a)) - seededRandom(randomSeed, result.indexOf(b))
+      );
+    }
+
+    return result;
+  }, [products, selectedCategory, searchQuery, randomSeed]);
 
   const pendingOrders = orders.filter((item) => item.status === "processing").length;
   const completedOrders = orders.filter((item) => item.status === "completed").length;
@@ -431,7 +457,17 @@ export function UserDashboard() {
                 ))}
               </select>
             </label>
-            <div className="section-tag">{filteredProducts.length} kết quả</div>
+            <label className="category-search-wrap">
+              <span className="panel-kicker">&nbsp;</span>
+              <input
+                type="text"
+                placeholder="Tìm tên sản phẩm..."
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                className="field search-field"
+                aria-label="Tìm kiếm sản phẩm"
+              />
+            </label>
           </div>
 
           <div className="chip-row" role="tablist" aria-label="Danh mục sản phẩm">
