@@ -562,72 +562,40 @@ export function UserDashboard() {
         <section className="section" id="orders">
           <div className="section-head">
             <div>
-              <h2 className="section-title">Đơn của bạn</h2>
-              <p className="section-copy">Gửi mã đơn trực tiếp ở từng sản phẩm. Khu này dùng để theo dõi trạng thái duyệt.</p>
+              <h2 className="section-title">Lịch sử đơn hàng</h2>
+              <p className="section-copy">Kiểm tra mã đơn, trạng thái và hoa hồng.</p>
             </div>
           </div>
 
-          <div className="dashboard-panels dashboard-panels--wide">
-            <div className="panel stack">
-              <div className="panel-kicker">Cách gửi mã đơn</div>
-              <h3>Gửi ngay trên từng sản phẩm</h3>
-              <div className="summary-metrics summary-metrics--panel">
-                <div>
-                  <span>Bước 1</span>
-                  <strong>Bấm Mua ngay</strong>
-                </div>
-                <div>
-                  <span>Bước 2</span>
-                  <strong>Quay lại đúng sản phẩm</strong>
-                </div>
-                <div>
-                  <span>Bước 3</span>
-                  <strong>Nhập mã đơn để duyệt</strong>
-                </div>
-              </div>
-              <div className="note">Vui lòng điền đúng mã đơn.</div>
-            </div>
-
-            <div className="panel panel--table">
-              <div className="panel-header">
-                <div>
-                  <div className="panel-kicker">Lịch sử đơn hàng</div>
-                  <h3>Đơn của bạn</h3>
-                </div>
-                <div className="section-tag">{orders.length} đơn</div>
-              </div>
-              {orders.length ? (
-                <div className="table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Mã đơn</th>
-                        <th>Sản phẩm</th>
-                        <th>Hoa hồng</th>
-                        <th>Trạng thái</th>
+          <div className="panel panel--table">
+            {orders.length ? (
+              <div className="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Mã đơn</th>
+                      <th>Sản phẩm</th>
+                      <th>Hoa hồng</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map((order) => (
+                      <tr key={order.id}>
+                        <td data-label="Mã đơn">{order.orderCode}</td>
+                        <td data-label="Sản phẩm">{order.productName || "Chưa gắn sản phẩm"}</td>
+                        <td data-label="Hoa hồng">{order.commissionValue ? formatCurrency(order.commissionValue) : "Đang chờ"}</td>
+                        <td data-label="Trạng thái">
+                          <StatusChip status={order.status} />
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {orders.map((order) => (
-                        <tr key={order.id}>
-                          <td data-label="Mã đơn">
-                            <strong>{order.orderCode}</strong>
-                            <div className="note">{formatDate(order.submittedAt)}</div>
-                          </td>
-                          <td data-label="Sản phẩm">{order.productName || "Chưa gắn sản phẩm"}</td>
-                          <td data-label="Hoa hồng">{order.commissionValue ? formatCurrency(order.commissionValue) : "Đang chờ duyệt"}</td>
-                          <td data-label="Trạng thái">
-                            <StatusChip status={order.status} />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <div className="empty">Chưa có đơn hàng nào.</div>
-              )}
-            </div>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="empty">Chưa có đơn hàng nào.</div>
+            )}
           </div>
         </section>
 

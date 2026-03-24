@@ -26,15 +26,18 @@ export function Topbar({ session, onLogout, onSearchToggle }: TopbarProps) {
           </span>
         </Link>
 
-        <nav className="nav-links" aria-label="Điều hướng chính">
-          <Link href="#products" className="nav-link">
-            Sản phẩm
+        <nav className="nav-links nav-links--compact" aria-label="Điều hướng chính">
+          <Link href="#products" className="nav-link nav-link--icon">
+            <Image src="/shopping-cart.png" alt="Sản phẩm" width={20} height={20} />
+            <span>Sản phẩm</span>
           </Link>
-          <Link href="#orders" className="nav-link">
-            Gửi mã đơn
+          <Link href="#orders" className="nav-link nav-link--icon">
+            <Image src="/tracking-number.png" alt="Mã đơn" width={20} height={20} />
+            <span>Mã đơn</span>
           </Link>
-          <Link href="#withdrawals" className="nav-link">
-            Rút tiền
+          <Link href="#withdrawals" className="nav-link nav-link--icon">
+            <Image src="/wallet-filled-money-tool.png" alt="Ví tiền" width={20} height={20} />
+            <span>Ví</span>
           </Link>
           {session ? (
             <div className="session-pill">
@@ -64,17 +67,17 @@ export function Topbar({ session, onLogout, onSearchToggle }: TopbarProps) {
       </div>
 
       <div className="mobile-dock" aria-label="Điều hướng nhanh trên điện thoại">
-        <Link href="#products" className="mobile-dock__item">
+        <Link href="#products" className="mobile-dock__item" aria-label="Sản phẩm">
+          <Image src="/shopping-cart.png" alt="Sản phẩm" width={22} height={22} />
           <span>Sản phẩm</span>
         </Link>
-        <Link href="#orders" className="mobile-dock__item">
+        <Link href="#orders" className="mobile-dock__item" aria-label="Mã đơn">
+          <Image src="/tracking-number.png" alt="Mã đơn" width={22} height={22} />
           <span>Mã đơn</span>
         </Link>
-        <Link href="#withdrawals" className="mobile-dock__item">
-          <span>Ví tiền</span>
-        </Link>
-        <Link href={session ? "#orders" : "#auth"} className="mobile-dock__item mobile-dock__item--accent">
-          <span>{session ? "Đơn của tôi" : "Đăng ký"}</span>
+        <Link href="#withdrawals" className="mobile-dock__item" aria-label="Ví tiền">
+          <Image src="/wallet-filled-money-tool.png" alt="Ví" width={22} height={22} />
+          <span>Ví</span>
         </Link>
       </div>
     </header>

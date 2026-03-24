@@ -200,9 +200,44 @@ img {
 .nav-links {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  max-width: 220px;
+  width: min(220px, 100%);
+  margin: 0 auto;
+}
+
+.nav-links--compact {
+  gap: 8px;
+}
+
+.nav-link--icon {
+  min-width: 66px;
+  height: 36px;
+  padding: 4px 6px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.nav-link--icon span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-block;
+  white-space: nowrap;
+  max-width: 56px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.nav-link--icon:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .search-btn {
@@ -1452,13 +1487,13 @@ tbody tr:hover {
   .mobile-dock {
     position: static;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
-    width: min(100% - 22px, var(--container));
+    width: min(100% - 22px, 320px);
     margin: 0 auto 10px;
     padding: 6px;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(139, 92, 246, 0.1);
     backdrop-filter: blur(10px);
     box-shadow: none;
@@ -1466,21 +1501,28 @@ tbody tr:hover {
   }
 
   .mobile-dock__item {
-    display: grid;
-    place-items: center;
-    min-height: 40px;
-    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    width: 72px;
+    padding: 4px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(139, 92, 246, 0.1);
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(139, 92, 246, 0.12);
     backdrop-filter: blur(8px);
-    font-size: 0.72rem;
-    font-weight: 800;
-    text-align: center;
     color: var(--text);
     cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease;
     will-change: transform;
+  }
+
+  .mobile-dock__item span {
+    font-size: 0.67rem;
+    margin-top: 2px;
+    line-height: 1.1;
+    color: var(--text);
   }
 
   .mobile-dock__item:active {
