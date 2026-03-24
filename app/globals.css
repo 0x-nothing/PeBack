@@ -19,7 +19,7 @@
   --warning: #F59E0B;
   --danger: #B23A3A;
   --shadow: 12px 12px 24px rgba(160, 150, 180, 0.15), -8px -8px 16px rgba(255, 255, 255, 0.7);
-  --shadow-soft: 10px 10px 20px rgba(139, 92, 246, 0.2), -6px -6px 12px rgba(255, 255, 255, 0.3);
+  --shadow-soft: 8px 8px 16px rgba(139, 92, 246, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.3);
   --shadow-pressed: inset 8px 8px 16px #d9d4e3, inset -8px -8px 16px #ffffff;
   --radius-xl: 48px;
   --radius-lg: 32px;
@@ -733,6 +733,9 @@ img {
 }
 
 .shop-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
   overflow: hidden;
   border-radius: 22px;
   box-shadow: var(--shadow-soft);
@@ -774,9 +777,20 @@ img {
 }
 
 .shop-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 16px;
+}
+
+.shop-card__content {
   display: grid;
   gap: 10px;
-  padding: 14px 14px 16px;
+  flex-shrink: 0;
+}
+
+.shop-card__actions {
+  margin-top: auto;
 }
 
 .shop-card__badges {
@@ -1339,6 +1353,7 @@ tbody tr:hover {
   }
 
   .shop-card {
+    min-height: 420px;
     border-radius: 18px;
   }
 
@@ -1351,8 +1366,11 @@ tbody tr:hover {
   }
 
   .shop-card__body {
-    gap: 8px;
     padding: 10px 10px 12px;
+  }
+
+  .shop-card__content {
+    gap: 8px;
   }
 
   .shop-card .stack {

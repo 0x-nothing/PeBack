@@ -504,48 +504,52 @@ export function UserDashboard() {
                   </div>
 
                   <div className="shop-card__body">
-                    <div className="shop-card__badges">
-                      <span className="badge badge--compact">{product.category}</span>
-                      <span className="mini-chip">{product.commissionPercent}% hoa hồng</span>
-                    </div>
-                    <h3 className="shop-card__title">{product.name}</h3>
-                    <p className="shop-card__desc">
-                      {product.description || "Sản phẩm đã được cấu hình sẵn giá, hoa hồng và link mua nhanh."}
-                    </p>
-                    <div className="shop-card__price-row">
-                      <div>
-                        <div className="mini-label">Giá sản phẩm</div>
-                        <div className="price price--shop">{formatCurrency(product.price)}</div>
+                    <div className="shop-card__content">
+                      <div className="shop-card__badges">
+                        <span className="badge badge--compact">{product.category}</span>
+                        <span className="mini-chip">{product.commissionPercent}% hoa hồng</span>
                       </div>
-                      <div className="cashback-box">
-                        <span>Hoàn lại</span>
-                        <strong>{formatCurrency(product.commissionValue)}</strong>
+                      <h3 className="shop-card__title">{product.name}</h3>
+                      <p className="shop-card__desc">
+                        {product.description || "Sản phẩm đã được cấu hình sẵn giá, hoa hồng và link mua nhanh."}
+                      </p>
+                      <div className="shop-card__price-row">
+                        <div>
+                          <div className="mini-label">Giá sản phẩm</div>
+                          <div className="price price--shop">{formatCurrency(product.price)}</div>
+                        </div>
+                        <div className="cashback-box">
+                          <span>Hoàn lại</span>
+                          <strong>{formatCurrency(product.commissionValue)}</strong>
+                        </div>
                       </div>
                     </div>
-                    <div className="shop-card__footer">
-                      <a className="button button--compact" href={product.affiliateLink} target="_blank" rel="noreferrer">
-                        Mua ngay
-                      </a>
+                    <div className="shop-card__actions">
+                      <div className="shop-card__footer">
+                        <a className="button button--compact" href={product.affiliateLink} target="_blank" rel="noreferrer">
+                          Mua ngay
+                        </a>
+                      </div>
+                      {session ? (
+                        <form className="stack" onSubmit={(event) => void handleSubmitOrder(event, product)}>
+                          <input
+                            className="field"
+                            placeholder="Nhập mã đơn Shopee"
+                            value={orderDrafts[product.id] ?? ""}
+                            onChange={(event) =>
+                              setOrderDrafts((prev) => ({ ...prev, [product.id]: event.target.value }))
+                            }
+                          />
+                          <button className="button-ghost button-ghost--compact" type="submit">
+                            Gửi mã đơn sản phẩm này
+                          </button>
+                        </form>
+                      ) : (
+                        <a className="button-ghost button-ghost--compact" href="#auth">
+                          Đăng ký để gửi mã đơn
+                        </a>
+                      )}
                     </div>
-                    {session ? (
-                      <form className="stack" onSubmit={(event) => void handleSubmitOrder(event, product)}>
-                        <input
-                          className="field"
-                          placeholder="Nhập mã đơn Shopee"
-                          value={orderDrafts[product.id] ?? ""}
-                          onChange={(event) =>
-                            setOrderDrafts((prev) => ({ ...prev, [product.id]: event.target.value }))
-                          }
-                        />
-                        <button className="button-ghost button-ghost--compact" type="submit">
-                          Gửi mã đơn sản phẩm này
-                        </button>
-                      </form>
-                    ) : (
-                      <a className="button-ghost button-ghost--compact" href="#auth">
-                        Đăng ký để gửi mã đơn
-                      </a>
-                    )}
                   </div>
                 </article>
               ))
