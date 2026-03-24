@@ -118,21 +118,21 @@ img {
   position: sticky;
   top: 0;
   z-index: 30;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  box-shadow: 0 4px 24px rgba(18, 24, 42, 0.12);
-  transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
-  will-change: transform, opacity;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+  will-change: auto;
 }
 
 @media (max-width: 768px) {
   .topbar {
     border-bottom: none;
     box-shadow: none;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(25px);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(30px);
     border-radius: 0;
   }
 
@@ -144,7 +144,7 @@ img {
   }
 
   .mobile-dock {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.10);
     backdrop-filter: blur(25px);
@@ -152,7 +152,7 @@ img {
 
   .nav-link--icon,
   .mobile-dock__item {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.10);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #1a1f33;
   }
@@ -1540,7 +1540,7 @@ tbody tr:hover {
     margin: 0 auto 10px;
     padding: 8px;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.32);
+    background: rgba(255, 255, 255, 0.20);
     border: 1px solid rgba(124, 58, 237, 0.15);
     backdrop-filter: blur(8px);
     box-shadow: 0 2px 10px rgba(20, 28, 48, 0.08);
@@ -1567,7 +1567,7 @@ tbody tr:hover {
     width: 72px;
     padding: 4px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(139, 92, 246, 0.12);
     backdrop-filter: blur(8px);
     color: var(--text);
