@@ -42,7 +42,6 @@ export function UserDashboard() {
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
-
   async function loadData() {
     setLoading(true);
     const productList = await getProducts();
@@ -262,8 +261,8 @@ export function UserDashboard() {
     }
 
     const amount = Number(withdrawAmount);
-    if (!amount || amount < 10000) {
-      setMessage("Số tiền rút tối thiểu là 10.000 VND.");
+    if (!amount || amount < 6000) {
+      setMessage("Số tiền rút tối thiểu là 6.000 VND.");
       return;
     }
 
@@ -359,11 +358,11 @@ export function UserDashboard() {
           </div>
         </section>
 
-        {message ? (
+        {message && (
           <section className="section section--tight">
             <div className="alert-banner">{message}</div>
           </section>
-        ) : null}
+        )}
 
         {!session ? (
           <section className="section section--auth-gate" id="auth">
@@ -642,7 +641,7 @@ export function UserDashboard() {
                 <input
                   className="field"
                   type="number"
-                  min={10000}
+                  min={6000}
                   placeholder="Số tiền cần rút"
                   value={withdrawAmount}
                   onChange={(event) => setWithdrawAmount(event.target.value)}
@@ -653,9 +652,10 @@ export function UserDashboard() {
                     <strong>{formatCurrency(currentUser?.balance ?? 0)}</strong>
                   </div>
                   <div>
-                    <span>Mức tối thiểu</span>
-                    <strong>10.000 VND</strong>
-                  </div>
+                  <span>Mức tối thiểu</span>
+                  <strong>6.000 VND</strong>
+                </div>
+
                 </div>
                 <button className="button" type="submit">
                   Gửi yêu cầu rút
@@ -700,3 +700,4 @@ export function UserDashboard() {
     </>
   );
 }
+

@@ -1160,15 +1160,27 @@ tbody tr:hover {
   width: 56px;
   height: 56px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, #A78BFA, var(--primary));
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   box-shadow: var(--shadow-soft);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-fab:hover {
-  transform: translateY(-1px);
-  box-shadow: 16px 16px 32px rgba(139, 92, 246, 0.4), -10px -10px 24px rgba(255, 255, 255, 0.6), inset 6px 6px 12px rgba(255, 255, 255, 0.3), inset -6px -6px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.contact-fab__icon img {
+  border-radius: inherit;
+  transition: transform 0.2s ease;
+}
+
+.contact-fab:hover .contact-fab__icon img {
+  transform: scale(1.05);
 }
 
 .contact-fab__icon {
@@ -1184,6 +1196,79 @@ tbody tr:hover {
   width: 20px;
   height: 20px;
 }
+
+.notification-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  animation: rise-in 0.4s ease-out;
+}
+
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(51, 47, 58, 0.8);
+  backdrop-filter: blur(12px);
+}
+
+.modal-content {
+  background: var(--surface-strong);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+  padding: 32px;
+  max-width: min(90vw, 520px);
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: rise-in 0.3s ease-out;
+  text-align: center;
+}
+
+.modal-content p {
+  margin: 0 0 28px;
+  color: var(--text);
+  line-height: 1.55;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+
+.modal-ok-button {
+  margin: 0 auto;
+  background: linear-gradient(135deg, #A78BFA, var(--primary));
+  color: white;
+  font-weight: 700;
+  min-height: 48px;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.2s ease;
+}
+
+.modal-ok-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 16px 16px 32px rgba(139, 92, 246, 0.4), -10px -10px 24px rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 620px) {
+  .modal-content {
+    padding: 24px 20px;
+    border-radius: var(--radius-md);
+  }
+  
+  .modal-content h3 {
+    font-size: 1.25rem;
+  }
+}
+
 
 @keyframes rise-in {
   from {
