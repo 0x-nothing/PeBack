@@ -20,8 +20,8 @@ export function NotificationModal() {
     Nếu chưa có sản phẩm mà bạn cần hãy nhắn cho page link sản phẩm nhé!
   </strong>
   <br />
-  <span className="text-red-500 font-bold">
-    *LƯU Ý: KHÔNG ĐƯỢC DÙNG 2 TÀI KHOẢN SHOPPE DÙNG CHUNG 1 ĐỊA CHỈ MẠNG...
+  <span className="danger-text">
+     *LƯU Ý: KHÔNG ĐƯỢC DÙNG 2 TÀI KHOẢN SHOPPE DÙNG CHUNG 1 ĐỊA CHỈ MẠNG VÀ ĐỊA CHỈ NHẬN NẾU KHÔNG SẼ BỊ TỪ CHỐI. MỌI SỐ TIỀN HOÀN LẠI HIỂN THỊ TRÊN WEB ĐỀU LÀ ƯỚC TÍNH
   </span>
 </p>
         <button className="modal-ok-button" onClick={hideNotification} autoFocus>
