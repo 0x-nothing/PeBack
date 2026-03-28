@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { DM_Sans, Nunito } from "next/font/google";
 import "./globals.css";
 import { NotificationModal } from "@/components/NotificationModal";
@@ -10,7 +10,7 @@ const fontDisplay = Nunito({
 });
 
 const fontBody = DM_Sans({
-  subsets: ["latin", "vietnamese"],
+  subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-body"
 });
@@ -43,12 +43,12 @@ export default function RootLayout({
           aria-label="Liên hệ Facebook"
         >
           <span className="contact-fab__icon" aria-hidden="true">
-            <img 
-src="/logomess.png" 
-              alt="Messenger" 
-              width="34" 
-              height="34" 
-              style={{borderRadius: '50%', objectFit: 'cover'}}
+            <img
+              src="/logomess.png"
+              alt="Messenger"
+              width="34"
+              height="34"
+              style={{ borderRadius: "50%", objectFit: "cover" }}
             />
           </span>
         </a>
@@ -56,6 +56,3 @@ src="/logomess.png"
     </html>
   );
 }
-
-
-
