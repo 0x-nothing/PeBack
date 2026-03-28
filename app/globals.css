@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 :root {
   --bg: #F4F1FA;
@@ -58,7 +57,6 @@ body::before {
     radial-gradient(circle at 80% 20%, rgba(219, 39, 119, 0.08) 0%, transparent 50%),
     radial-gradient(circle at 40% 80%, rgba(14, 165, 233, 0.06) 0%, transparent 50%);
   animation: clay-float 12s ease-in-out infinite;
-  will-change: transform;
 }
 
 @keyframes clay-float {
@@ -98,15 +96,37 @@ img {
   padding: 28px 0 42px;
 }
 
-.page-stack--user .section--products-first {
+.section,
+.panel,
+.hero-card,
+.shop-card,
+.table-wrap,
+.empty {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 320px;
+}
+
+.page-stack--member .section--products-first {
   order: -30;
 }
 
-.page-stack--user .store-hero--landing {
+.page-stack--member .store-hero--landing {
   order: -20;
 }
 
-.page-stack--user .section--auth-gate {
+.page-stack--member .section--auth-gate {
+  order: -10;
+}
+
+.page-stack--guest .section--auth-gate {
+  order: -30;
+}
+
+.page-stack--guest .store-hero--landing {
+  order: -20;
+}
+
+.page-stack--guest .section--products-first {
   order: -10;
 }
 
@@ -124,7 +144,6 @@ img {
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   box-shadow: var(--shadow);
   transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
-  will-change: auto;
 }
 
 @media (max-width: 768px) {
@@ -282,7 +301,6 @@ img {
   color: var(--text);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  will-change: transform, box-shadow;
 }
 
 .search-btn:hover {
@@ -328,7 +346,6 @@ img {
   min-height: 56px;
   padding: 14px 24px;
   font-family: var(--font-display);
-  will-change: transform, box-shadow;
 }
 
 .nav-link:hover,
@@ -458,7 +475,6 @@ img {
   box-shadow: var(--shadow);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   backdrop-filter: blur(10px);
-  will-change: transform, box-shadow;
 }
 
 .hero-card:hover,
@@ -561,7 +577,6 @@ img {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(139, 92, 246, 0.1);
   box-shadow: none;
-  will-change: auto;
 }
 
 .hero-search__copy {
@@ -806,7 +821,6 @@ img {
   border-radius: 18px;
   box-shadow: 0 2px 14px rgba(24, 31, 64, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.16);
   transform: translateZ(0);
-  will-change: transform, opacity;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -1151,6 +1165,7 @@ tbody tr:hover {
 }
 
 .contact-fab {
+  content-visibility: visible;
   position: fixed;
   right: 18px;
   bottom: 18px;
@@ -1447,6 +1462,17 @@ tbody tr:hover {
     border-bottom: 0;
   }
 
+  .hero-card,
+  .panel,
+  .card,
+  .shop-card,
+  .alert-banner,
+  .mobile-dock,
+  .contact-fab,
+  .topbar {
+    backdrop-filter: none !important;
+  }
+
   .topbar__inner {
     display: none;
   }
@@ -1484,6 +1510,20 @@ tbody tr:hover {
   .shop-card,
   .alert-banner {
     animation: none;
+  }
+
+  .hero-card:hover,
+  .panel:hover,
+  .card:hover,
+  .shop-card:hover,
+  .nav-link:hover,
+  .button:hover,
+  .button-muted:hover,
+  .button-ghost:hover,
+  .chip-button:hover,
+  .contact-fab:hover {
+    transform: none;
+    box-shadow: inherit;
   }
 
   .hero-card--store::after {
@@ -1625,16 +1665,14 @@ tbody tr:hover {
     margin: 0 auto 10px;
     padding: 8px;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.20);
+    background: rgba(255, 255, 255, 0.88);
     border: 1px solid rgba(124, 58, 237, 0.15);
-    backdrop-filter: blur(8px);
+
     box-shadow: 0 2px 10px rgba(20, 28, 48, 0.08);
-    will-change: transform, opacity;
   }
 
   .mobile-dock__item {
     transition: transform 0.12s ease, background 0.12s ease;
-    will-change: transform;
   }
 
   .mobile-dock__item:hover,
@@ -1652,13 +1690,12 @@ tbody tr:hover {
     width: 72px;
     padding: 4px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.98);
     border: 1px solid rgba(139, 92, 246, 0.12);
-    backdrop-filter: blur(8px);
+
     color: var(--text);
     cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease;
-    will-change: transform;
   }
 
   .mobile-dock__item span {

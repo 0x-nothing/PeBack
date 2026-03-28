@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Image from "next/image";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useDeferredValue, useEffect, useMemo, useState } from "react";
 import {
   createOrder,
   createWithdrawal,
@@ -42,6 +42,7 @@ export function UserDashboard() {
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   async function loadData() {
     setLoading(true);
     const productList = await getProducts();
@@ -101,27 +102,28 @@ export function UserDashboard() {
   }, [products]);
 
   const filteredProducts = useMemo(() => {
-    const normalized = searchQuery.trim().toLowerCase();
-    let result = products.filter((item) => {
+    const normalized = deferredSearchQuery.trim().toLowerCase();
+    const baseList = products.filter((item) => {
       const categoryMatch = selectedCategory === "Tất cả" || item.category === selectedCategory;
       const searchMatch = normalized === "" || item.name.toLowerCase().includes(normalized);
       return categoryMatch && searchMatch;
     });
 
-    // Shuffle khi selectedCategory === "Tất cả"
-    if (selectedCategory === "Tất cả") {
-      const seededRandom = (seed: number, index: number) => {
-        const x = Math.sin(seed + index) * 10000;
-        return x - Math.floor(x);
-      };
-
-      result = [...result].sort(
-        (a, b) => seededRandom(randomSeed, result.indexOf(a)) - seededRandom(randomSeed, result.indexOf(b))
-      );
+    if (selectedCategory !== "Tất cả") {
+      return baseList;
     }
 
-    return result;
-  }, [products, selectedCategory, searchQuery, randomSeed]);
+    return baseList
+      .map((item, index) => {
+        const x = Math.sin(randomSeed + index) * 10000;
+        return {
+          item,
+          weight: x - Math.floor(x)
+        };
+      })
+      .sort((left, right) => left.weight - right.weight)
+      .map((entry) => entry.item);
+  }, [products, selectedCategory, deferredSearchQuery, randomSeed]);
 
   const pendingOrders = orders.filter((item) => item.status === "processing").length;
   const completedOrders = orders.filter((item) => item.status === "completed").length;
@@ -261,8 +263,8 @@ export function UserDashboard() {
     }
 
     const amount = Number(withdrawAmount);
-    if (!amount || amount < 6000) {
-      setMessage("Số tiền rút tối thiểu là 6.000 VND.");
+    if (!amount || amount < 10000) {
+      setMessage("Số tiền rút tối thiểu là 10.000 VND.");
       return;
     }
 
@@ -297,7 +299,7 @@ export function UserDashboard() {
     <>
       <Topbar session={session} onLogout={() => void handleLogout()} />
 
-      <main className="page-shell page-stack page-stack--user">
+      <main className={session ? "page-shell page-stack page-stack--member" : "page-shell page-stack page-stack--guest"}>
         <section className="store-hero store-hero--landing">
           <div className="hero-card hero-card--store">
             <span className="badge">Sản phẩm affiliate có hoa hồng rõ ràng</span>
@@ -641,7 +643,7 @@ export function UserDashboard() {
                 <input
                   className="field"
                   type="number"
-                  min={6000}
+                  min={10000}
                   placeholder="Số tiền cần rút"
                   value={withdrawAmount}
                   onChange={(event) => setWithdrawAmount(event.target.value)}
@@ -653,7 +655,7 @@ export function UserDashboard() {
                   </div>
                   <div>
                   <span>Mức tối thiểu</span>
-                  <strong>6.000 VND</strong>
+                  <strong>10.000 VND</strong>
                 </div>
 
                 </div>
@@ -700,4 +702,3 @@ export function UserDashboard() {
     </>
   );
 }
-

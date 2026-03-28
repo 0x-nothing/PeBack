@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
+import { DM_Sans, Nunito } from "next/font/google";
 import "./globals.css";
 import { NotificationModal } from "@/components/NotificationModal";
+
+const fontDisplay = Nunito({
+  subsets: ["latin", "vietnamese"],
+  weight: ["700", "800", "900"],
+  variable: "--font-display"
+});
+
+const fontBody = DM_Sans({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body"
+});
 
 export const metadata: Metadata = {
   title: "PeBack",
@@ -19,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body>
+      <body className={`${fontDisplay.variable} ${fontBody.variable}`}>
         {children}
         <NotificationModal />
         <a
